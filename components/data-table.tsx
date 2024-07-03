@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { useConfirm } from "@/hooks/use-confirm";
+
 import { Trash } from "lucide-react";
 
 import {
@@ -44,6 +46,11 @@ export function DataTable<TData, TValue>({
   onDelete,
   disabled,
 }: DataTableProps<TData, TValue>) {
+  const [ConfirmationDialog, confirm] = useConfirm(
+      "Are you sure?",
+      "You are about to bulk delete accounts. You can't undo this action.",
+  );
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -69,6 +76,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <ConfirmationDialog />
       <div className="flex items-center py-4">
         <Input
           placeholder={`Filter ${filterKey}...`}
@@ -84,9 +92,13 @@ export function DataTable<TData, TValue>({
             size="sm"
             className="ml-auto font-normal text-sm"
             disabled={disabled}
-            onClick={() => {
-              onDelete(table.getFilteredSelectedRowModel().rows);
-              table.resetRowSelection();
+            onClick={async () => {
+              const ok = await confirm();
+
+              if (ok) {
+                onDelete(table.getFilteredSelectedRowModel().rows);
+                table.resetRowSelection();
+              }
             }}
           >
             <Trash className="size-4 mr-2" />
