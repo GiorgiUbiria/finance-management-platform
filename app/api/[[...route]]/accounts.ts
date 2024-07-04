@@ -153,6 +153,59 @@ const app = new Hono()
         data,
       });
     },
+  )
+  .patch(
+    "/:id",
+    clerkMiddleware(),
+    zValidator(
+      "param",
+      z.object({
+        id: z.string().optional(),
+      }),
+    ),
+    zValidator(
+      "json",
+      insertAccountSchema.pick({
+        name: true,
+      }),
+    ),
+    async (c) => {
+      const auth = getAuth(c);
+      const { id } = c.req.valid("param");
+      const values = c.req.valid("json");
+
+      if (!id) {
+        return c.json(
+          {
+            error: "Missing id",
+          },
+          400,
+        );
+      }
+
+      if (!auth?.userId) {
+        return c.json(
+          {
+            error: "Unauthorized",
+          },
+          401,
+        );
+      }
+
+      const [data] = await db
+        .update(accounts)
+        .set({
+          name: values.name,
+        })
+        .where(and(eq(accounts.userId, auth.userId), eq(accounts.id, id)))
+        .returning();
+
+      if (!data) {
+        return c.json({ error: "Account not found" }, 404);
+      }
+
+      return c.json({ data });
+    },
   );
 
 export default app;
