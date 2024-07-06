@@ -15,7 +15,7 @@ const formSchema = insertCategorySchema.pick({ name: true });
 
 type FormValues = z.input<typeof formSchema>;
 
-export const NewAccountSheet = () => {
+export const NewCategorySheet = () => {
   const { isOpen, onClose } = useNewCategory();
 
   const mutation = useCreateCategory();
