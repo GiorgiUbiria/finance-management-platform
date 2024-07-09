@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { relations } from "drizzle-orm";
 
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
@@ -56,3 +58,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     references: [categories.id],
   }),
 }));
+
+export const insertTransactionSchema = createInsertSchema(transactions, {
+  date: z.coerce.date(),
+});
