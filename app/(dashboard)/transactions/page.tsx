@@ -16,12 +16,12 @@ import { columns } from "./columns";
 const TransactionsPage = () => {
   const newTransaction = useNewTransaction();
   const deleteTransactions = useBulkDeleteTransactions();
-  const TransactionsQuery = useGetTransactions();
-  const transactions = TransactionsQuery.data || [];
+  const transactionsQuery = useGetTransactions();
+  const transactions = transactionsQuery.data || [];
 
-  const isDisabled = TransactionsQuery.isLoading || deleteTransactions.isPending;
+  const isDisabled = transactionsQuery.isLoading || deleteTransactions.isPending;
 
-  if (TransactionsQuery.isLoading) {
+  if (transactionsQuery.isLoading) {
     return (
       <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
         <Card className="border-none drop-shadow-sm">
@@ -52,7 +52,7 @@ const TransactionsPage = () => {
           <DataTable
             columns={columns}
             data={transactions}
-            filterKey="name"
+            filterKey="date"
             onDelete={(rows) => {
               const ids = rows.map((r) => r.original.id);
               deleteTransactions.mutate({ ids });

@@ -21,12 +21,12 @@ export const DatePicker = ({ value, onChange, disabled }: Props) => {
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant="outline"
           className={cn(
             "w-full justify-start text-left font-normal",
             !value && "text-muted-foreground",
           )}
-          disabled={disabled}
         >
           <CalendarIcon className="size-4 mr-2" />
           {value ? format(value, "PPP") : "Pick a date"}
