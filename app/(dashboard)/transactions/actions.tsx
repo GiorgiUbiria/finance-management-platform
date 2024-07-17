@@ -19,15 +19,15 @@ type Props = {
 
 export const Actions = ({ id }: Props) => {
   const deleteMutation = useDeleteTransaction(id);
-  
+
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure you want to delete this transaction?",
-    "You are about to delete this account."
+    "You are about to delete this transaction.",
   );
 
-  const {onOpen} = useOpenTransaction();
+  const { onOpen } = useOpenTransaction();
 
-  const handleDelete =  async () => {
+  const handleDelete = async () => {
     const ok = await confirm();
     if (ok) {
       deleteMutation.mutate();
