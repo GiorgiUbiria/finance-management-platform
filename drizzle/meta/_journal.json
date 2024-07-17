@@ -1,54 +1,12 @@
 {
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1719860803309,
-      "tag": "0000_wonderful_human_fly",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1719861327151,
-      "tag": "0001_luxuriant_paper_doll",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1719935084098,
-      "tag": "0002_shocking_sasquatch",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1719935357147,
-      "tag": "0003_unusual_thing",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1719935399987,
-      "tag": "0004_luxuriant_blade",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1720275381509,
-      "tag": "0005_medical_alice",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1720546682514,
-      "tag": "0006_omniscient_mentallo",
+      "version": "7",
+      "when": 1721221529475,
+      "tag": "0000_broken_martin_li",
       "breakpoints": true
     }
   ]
