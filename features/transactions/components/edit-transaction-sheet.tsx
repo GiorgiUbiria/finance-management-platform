@@ -14,6 +14,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Loader2 } from "lucide-react";
+import { useCreateCategory } from "@/features/categories/api/use-create-category";
+import { useGetCategories } from "@/features/categories/api/use-get-categories";
+import { useCreateAccount } from "@/features/accounts/api/use-create-account";
+import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
 
 const formSchema = insertTransactionSchema.omit({ id: true });
 
@@ -27,13 +31,37 @@ export const EditTransactionSheet = () => {
     "You are about to delete an Transaction.",
   );
 
-  const TransactionQuery = useGetTransaction(id);
+  const transactionQuery = useGetTransaction(id);
   const editMutation = useEditTransaction(id);
   const deleteMutation = useDeleteTransaction(id);
 
-  const isPending = editMutation.isPending || deleteMutation.isPending;
+  const categoryMutation = useCreateCategory();
+  const categoryQuery = useGetCategories();
+  const onCreateCategory = (name: string) => categoryMutation.mutate({ name });
+  const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
+    label: category.name,
+    value: category.id,
+  }));
 
-  const isLoading = TransactionQuery.isLoading;
+  const accountMutation = useCreateAccount();
+  const accountQuery = useGetAccounts();
+  const onCreateAccount = (name: string) => accountMutation.mutate({ name });
+  const accountOptions = (accountQuery.data ?? []).map((account) => ({
+    label: account.name,
+    value: account.id,
+  }));
+
+  const isPending =
+    editMutation.isPending ||
+    deleteMutation.isPending ||
+    transactionQuery.isLoading ||
+    categoryMutation.isPending ||
+    accountMutation.isPending;
+
+  const isLoading =
+    transactionQuery.isLoading ||
+    categoryQuery.isLoading ||
+    accountQuery.isLoading;
 
   const onSubmit = (values: FormValues) => {
     editMutation.mutate(values, {
@@ -52,14 +80,26 @@ export const EditTransactionSheet = () => {
         },
       });
     }
-  }
+  };
 
-  const defaultValues = TransactionQuery.data
+  const defaultValues = transactionQuery.data
     ? {
-        amount: TransactionQuery.data.amount,
+        categoryId: transactionQuery.data.categoryId,
+        accountId: transactionQuery.data.accountId,
+        amount: transactionQuery.data.amount.toString(),
+        date: transactionQuery.data.date
+          ? new Date(transactionQuery.data.date)
+          : new Date(),
+        payee: transactionQuery.data.payee,
+        notes: transactionQuery.data.notes,
       }
     : {
-        amount: 0,
+        categoryId: "",
+        accountId: "",
+        amount: "",
+        date: new Date(),
+        payee: "",
+        notes: "",
       };
 
   return (
@@ -81,6 +121,10 @@ export const EditTransactionSheet = () => {
               onSubmit={onSubmit}
               onDelete={onDelete}
               disabled={isPending}
+              categoryOptions={categoryOptions}
+              accountOptions={accountOptions}
+              onCreateCategory={onCreateCategory}
+              onCreateAccount={onCreateAccount}
               defaultValues={defaultValues}
             />
           )}
