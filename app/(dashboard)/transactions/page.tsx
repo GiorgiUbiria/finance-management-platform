@@ -15,6 +15,7 @@ import { DataTable } from "@/components/data-table";
 
 import { columns } from "./columns";
 import { UploadButton } from "@/components/upload-button";
+import { ImportCard } from "@/components/import-card";
 
 enum VARIANTS {
   LIST = "LIST",
@@ -29,6 +30,17 @@ const INITIAL_IMPORT_RESULTS = {
 
 const TransactionsPage = () => {
   const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
+  const [importResults, setImportResults] = useState<typeof INITIAL_IMPORT_RESULTS>(INITIAL_IMPORT_RESULTS);
+
+  const onUpload = (results: typeof INITIAL_IMPORT_RESULTS) => {
+      setImportResults(results);
+      setVariant(VARIANTS.IMPORT);
+  }
+
+  const onCancelImport = () => {
+    setImportResults(INITIAL_IMPORT_RESULTS);
+    setVariant(VARIANTS.LIST);
+  }
 
   const newTransaction = useNewTransaction();
   const deleteTransactions = useBulkDeleteTransactions();
@@ -58,7 +70,11 @@ const TransactionsPage = () => {
   if (variant === VARIANTS.IMPORT) {
     return (
       <>
-        <div>This is a screen for import</div>
+        <ImportCard
+          data={importResults.data}
+          onCancel={onCancelImport}
+          onSubmit={onUpload}
+        />
       </>
     );
   }
@@ -75,7 +91,7 @@ const TransactionsPage = () => {
               <PlusIcon className="size-4 mr-2" />
               Add New
             </Button>
-            <UploadButton onUpload={() => {}} />
+            <UploadButton onUpload={onUpload} />
           </div>
         </CardHeader>
         <CardContent>
