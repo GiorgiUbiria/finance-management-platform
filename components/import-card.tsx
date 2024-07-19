@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ImportTable } from "./import-table";
 
 const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
@@ -27,6 +28,31 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
   const headers = data[0];
   const body = data.slice(1);
 
+  const onTableHeadSelectChange = (
+    columIndex: number,
+    value: string | null,
+  ) => {
+    setSelectedColumns((prevState) => {
+      const newSelectedColumns = { ...prevState };
+
+      for (const key in newSelectedColumns) {
+        if (newSelectedColumns[key] === value) {
+          newSelectedColumns[key] = null;
+        }
+      }
+
+      if (value === "skip") {
+        value = null;
+      }
+
+      newSelectedColumns[`column${columIndex}`] = value;
+
+      return newSelectedColumns;
+    });
+  };
+
+  const progress = Object.values(selectedColumns).filter(Boolean).length;
+
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
@@ -38,6 +64,13 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
             <Button size="sm" onClick={onCancel}>
               Cancel
             </Button>
+            <Button
+              size="sm"
+              disabled={progress < requiredFields.length}
+              onClick={() => {}}
+            >
+              Continue ({progress} / {requiredFields.length})
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -45,7 +78,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
             headers={headers}
             body={body}
             selectedColumns={selectedColumns}
-            onTableHeadSelectChange={() => {}}
+            onTableHeadSelectChange={onTableHeadSelectChange}
           />
         </CardContent>
       </Card>
