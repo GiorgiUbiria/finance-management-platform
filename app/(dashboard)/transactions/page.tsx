@@ -30,17 +30,19 @@ const INITIAL_IMPORT_RESULTS = {
 
 const TransactionsPage = () => {
   const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
-  const [importResults, setImportResults] = useState<typeof INITIAL_IMPORT_RESULTS>(INITIAL_IMPORT_RESULTS);
+  const [importResults, setImportResults] = useState<
+    typeof INITIAL_IMPORT_RESULTS
+  >(INITIAL_IMPORT_RESULTS);
 
   const onUpload = (results: typeof INITIAL_IMPORT_RESULTS) => {
-      setImportResults(results);
-      setVariant(VARIANTS.IMPORT);
-  }
+    setImportResults(results);
+    setVariant(VARIANTS.IMPORT);
+  };
 
   const onCancelImport = () => {
     setImportResults(INITIAL_IMPORT_RESULTS);
     setVariant(VARIANTS.LIST);
-  }
+  };
 
   const newTransaction = useNewTransaction();
   const deleteTransactions = useBulkDeleteTransactions();
