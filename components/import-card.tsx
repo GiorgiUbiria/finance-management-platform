@@ -89,7 +89,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
     const formattedData = arrayOfData.map((item) => ({
       ...item,
       amount: convertAmountToMiliunits(parseFloat(item.amount)),
-      date: format(parse(item.date, dateFormat, new Date()), outputFormat),
+      date: format(parse(item.date.trim(), dateFormat, new Date()), outputFormat),
     }));
 
     onSubmit(formattedData);
@@ -109,7 +109,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
             <Button
               size="sm"
               disabled={progress < requiredFields.length}
-              onClick={() => { }}
+              onClick={handleContinue}
               className="w-full lg:w-auto"
             >
               Continue ({progress} / {requiredFields.length})
