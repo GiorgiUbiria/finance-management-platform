@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ImportTable } from "./import-table";
+import { convertAmountToMiliunits } from "@/lib/utils";
+import { format, parse } from "date-fns";
 
 const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
@@ -15,7 +17,7 @@ interface SelectedColumsState {
 }
 
 type Props = {
-  data: string[];
+  data: string[][];
   onCancel: () => void;
   onSubmit: (data: any) => void;
 };
@@ -52,6 +54,46 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
   };
 
   const progress = Object.values(selectedColumns).filter(Boolean).length;
+
+  const handleContinue = () => {
+    const getColumnIndex = (column: string) => {
+      return column.split("_")[1];
+    }
+
+    const mappedData = {
+      headers: headers.map((_header, index) => {
+        const columnIndex = getColumnIndex(`column_${index}`);
+        return selectedColumns[`column_${columnIndex}`] || null;
+      }),
+      body: body.map((row) => {
+        const transformedRow = row.map((cell, index) => {
+          const columnIndex = getColumnIndex(`column_${index}`);
+          return selectedColumns[`column_${columnIndex}`] ? cell : null;
+        })
+
+        return transformedRow.every((item) => item === null) ? [] : transformedRow;
+      }).filter((row) => row.length > 0),
+    }
+
+    const arrayOfData = mappedData.body.map((row) => {
+      return row.reduce((acc: any, cell, index) => {
+        const header = mappedData.headers[index];
+        if (header !== null) {
+          acc[header] = cell;
+        }
+
+        return acc;
+      }, [])
+    });
+
+    const formattedData = arrayOfData.map((item) => ({
+      ...item,
+      amount: convertAmountToMiliunits(parseFloat(item.amount)),
+      date: format(parse(item.date, dateFormat, new Date()), outputFormat),
+    }));
+
+    onSubmit(formattedData);
+  }
 
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
