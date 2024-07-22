@@ -60,14 +60,15 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
           <CardTitle className="text-xl line-clamp-1">
             Import Transactions
           </CardTitle>
-          <div className="flex gap-x-2 items-center">
-            <Button size="sm" onClick={onCancel}>
+          <div className="flex flex-col lg:flex-row gap-y-2 gap-x-2 items-center">
+            <Button size="sm" onClick={onCancel} className="w-full lg:w-auto">
               Cancel
             </Button>
             <Button
               size="sm"
               disabled={progress < requiredFields.length}
-              onClick={() => {}}
+              onClick={() => { }}
+              className="w-full lg:w-auto"
             >
               Continue ({progress} / {requiredFields.length})
             </Button>
