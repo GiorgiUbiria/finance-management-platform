@@ -32,8 +32,8 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
     columIndex: number,
     value: string | null,
   ) => {
-    setSelectedColumns((prevState) => {
-      const newSelectedColumns = { ...prevState };
+    setSelectedColumns((prev) => {
+      const newSelectedColumns = { ...prev };
 
       for (const key in newSelectedColumns) {
         if (newSelectedColumns[key] === value) {
@@ -45,7 +45,7 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
         value = null;
       }
 
-      newSelectedColumns[`column${columIndex}`] = value;
+      newSelectedColumns[`column_${columIndex}`] = value;
 
       return newSelectedColumns;
     });
