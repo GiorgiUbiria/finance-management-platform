@@ -14,7 +14,7 @@ export const accounts = pgTable("accounts", {
 });
 
 export const accountsRelations = relations(accounts, ({ many }) => ({
-  transactions: many(transactions),
+  transactions: many(transactions)
 }));
 
 export const insertAccountSchema = createInsertSchema(accounts);
