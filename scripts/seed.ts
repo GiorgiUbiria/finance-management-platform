@@ -52,7 +52,7 @@ const generateRandomAmount = (category: typeof categories.$inferSelect) => {
 	}
 }
 
-const generateTransactionsForDay = (day: Date) => {
+const generateTransactionsForDay = (day: Date, dayIndex: number) => {
 	const numTransactions = Math.floor(Math.random() * 4) + 1;
 
 	for (let i = 0; i < numTransactions; i++) {
@@ -62,7 +62,7 @@ const generateTransactionsForDay = (day: Date) => {
 		const formattedAmount = convertAmountToMiliunits(isExpense ? -amount : amount);
 
 		SEED_TRANSACTIONS.push({
-			id: `transactions_${format(day, "yyyy-mm-dd")}_${i}`,
+			id: `transactions_${format(day, "yyyy-mm-dd")}_${category}_${dayIndex}_${i}`,
 			accountId: SEED_ACCOUNTS[0].id,
 			categoryId: category.id,
 			date: day,
@@ -75,7 +75,7 @@ const generateTransactionsForDay = (day: Date) => {
 
 const generateTransactions = () => {
 	const days = eachDayOfInterval({ start: defaultFrom, end: defaultTo });
-	days.forEach(day => generateTransactionsForDay(day))
+	days.forEach((day, index) => generateTransactionsForDay(day, index))
 };
 
 generateTransactions();
