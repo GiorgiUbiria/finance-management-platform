@@ -50,7 +50,7 @@ export function fillMissingDays(activeDays: {date: Date, income: number, expense
       return {
         date: day,
         income: 0,
-        expnses: 0,
+        expenses: 0,
       }
     }
   });
