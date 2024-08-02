@@ -1,16 +1,14 @@
 import { Hono } from "hono";
 import { z } from "zod";
 
-import { eq, and, inArray, gte, lte, desc, sql, sum, lt } from "drizzle-orm";
+import { eq, and, gte, lte, desc, sql, sum, lt } from "drizzle-orm";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { createId } from "@paralleldrive/cuid2";
 import { differenceInDays, parse, subDays } from "date-fns";
 
 import { db } from "@/db/drizzle";
 import {
   transactions,
-  insertTransactionSchema,
   categories,
   accounts,
 } from "@/db/schema";
@@ -31,6 +29,8 @@ const app = new Hono()
     async (c) => {
       const auth = getAuth(c);
       const { from, to, accountId } = c.req.valid("query");
+
+      console.log(accountId)
 
       if (!auth?.userId) {
         return c.json(
@@ -67,7 +67,7 @@ const app = new Hono()
           )
           .where(
             and(
-              accountId ? eq(transactions.id, accounts.id) : undefined,
+              accountId ? eq(transactions.accountId, accounts.id) : undefined,
               eq(accounts.userId, userId),
               gte(transactions.date, startDate),
               lte(transactions.date, endDate),
@@ -109,7 +109,7 @@ const app = new Hono()
         )
         .where(
           and(
-            accountId ? eq(transactions.id, accounts.id) : undefined,
+            accountId ? eq(transactions.accountId, accounts.id) : undefined,
             eq(accounts.userId, auth.userId),
             lt(transactions.amount, 0),
             gte(transactions.date, startDate),
@@ -149,7 +149,7 @@ const app = new Hono()
         )
         .where(
           and(
-            accountId ? eq(transactions.id, accounts.id) : undefined,
+            accountId ? eq(transactions.accountId, accounts.id) : undefined,
             eq(accounts.userId, auth.userId),
             gte(transactions.date, startDate),
             lte(transactions.date, endDate),
