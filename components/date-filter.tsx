@@ -1,29 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { format, subDays } from "date-fns";
-import { DateRange } from "react-day-picker";
-import { ChevronDown } from "lucide-react";
-import {
-	Select,
-	SelectItem,
-	SelectContent,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
-import qs from "query-string";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useGetSummary } from "@/features/summary/api/use-get-summary";
-import { cn, formartDateRange } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
 	Popover,
+	PopoverClose,
 	PopoverContent,
 	PopoverTrigger,
-	PopoverClose,
 } from "@/components/ui/popover";
+import { formatDateRange } from "@/lib/utils";
+import { format, subDays } from "date-fns";
+import { ChevronDown } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import qs from "query-string";
+import { useState } from "react";
+import { DateRange } from "react-day-picker";
 
 export const DateFilter = () => {
 	const router = useRouter();
@@ -73,7 +64,7 @@ export const DateFilter = () => {
 					variant="outline"
 					className="lg:w-auto w-full h-9 rounded-md px-3 font-normal bg-white/10 hover:bg-white/20 hover:text-white border-none focus:ring-offset-0 focus:ring-transparent outline-none text-white focus:bg-white/30 transition"
 				>
-					<span>{formartDateRange(paramState)}</span>
+					<span>{formatDateRange(paramState)}</span>
 					<ChevronDown className="ml-2 size-4 opacity-50" />
 				</Button>
 			</PopoverTrigger>
